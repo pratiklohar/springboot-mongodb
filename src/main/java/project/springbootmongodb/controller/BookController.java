@@ -1,10 +1,9 @@
 package project.springbootmongodb.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
-import project.springbootmongodb.model.Book;
-import project.springbootmongodb.service.BookService;
+import project.springbootmongodb.dto.BookDTO;
+import project.springbootmongodb.service.BookServiceImpl;
 
 import java.util.List;
 
@@ -12,33 +11,35 @@ import java.util.List;
 public class BookController {
 
     @Autowired
-    BookService bookService;
+    BookServiceImpl bookService;
 
     @PostMapping("/book")
-    public Book addBook(@RequestBody Book book){
+    public BookDTO addBook(@RequestBody BookDTO book) {
         return bookService.addBook(book);
     }
 
     @GetMapping("/books")
-    public List<Book> allBooks() {
+    public List<BookDTO> allBooks() {
         return bookService.allBooks();
     }
 
     @GetMapping("/book/{id}")
-    public Book searchBook(@PathVariable String id){
+    public BookDTO searchBook(@PathVariable String id) {
         return bookService.searchBook(id);
     }
+
     @GetMapping("/book")
-    public Book searchBookByTitle(@RequestParam String title){
+    public BookDTO searchBookByTitle(@RequestParam String title) {
         return bookService.searchBookByTitle(title);
     }
 
     @PatchMapping("/book")
-    public String updateBook(@RequestBody Book book){
+    public String updateBook(@RequestBody BookDTO book) {
         return bookService.updateBook(book);
     }
+
     @DeleteMapping("/book/{id}")
-    public String deleteBook(@PathVariable String id){
+    public String deleteBook(@PathVariable String id) {
         return bookService.deleteBook(id);
     }
 

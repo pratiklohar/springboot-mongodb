@@ -1,15 +1,13 @@
-package project.springbootmongodb.model;
+package project.springbootmongodb.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("book")
-public class Book {
-    @Id
+public class BookDTO {
     private String id;
     private String title;
     private String author;
