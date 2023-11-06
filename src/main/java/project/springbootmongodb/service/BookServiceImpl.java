@@ -7,7 +7,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-import project.springbootmongodb.dto.BookDTO;
+import project.springbootmongodb.dto.BookRequest;
+import project.springbootmongodb.dto.BookResponse;
 import project.springbootmongodb.model.Book;
 import project.springbootmongodb.repository.BookRepo;
 
@@ -26,52 +27,50 @@ public class BookServiceImpl implements BookService {
 
     ModelMapper modelMapper = new ModelMapper();
 
-    public BookDTO addBook(BookDTO book) {
-        Book bookEntity = modelMapper.map(book, Book.class);
-        return modelMapper.map(bookRepo.save(bookEntity), BookDTO.class);
+    public BookResponse addBook(BookRequest bookRequest) {
+        Book book = modelMapper.map(bookRequest, Book.class);
+        return modelMapper.map(bookRepo.save(book), BookResponse.class);
     }
 
-    public List<BookDTO> allBooks() {
+    public List<BookResponse> allBooks() {
 
-        List<Book> bookList = bookRepo.findAll();
-        List<BookDTO> books = bookList
+        return bookRepo.findAll()
                 .stream()
-                .map(book -> modelMapper.map(book, BookDTO.class))
+                .map(book -> modelMapper.map(book, BookResponse.class))
                 .collect(Collectors.toList());
-        return books;
     }
 
-    public BookDTO searchBook(String id) {
+    public BookResponse searchBook(String id) {
 
         Optional<Book> bookOptional = bookRepo.findById(id);
         if (bookOptional.isPresent()) {
-            return modelMapper.map(bookOptional.get(), BookDTO.class);
+            return modelMapper.map(bookOptional.get(), BookResponse.class);
         } else {
             return null;
         }
     }
 
-    public BookDTO searchBookByTitle(String title) {
+    public BookResponse searchBookByTitle(String title) {
         Optional<Book> bookOptional = bookRepo.findByTitle(title);
-        if (bookOptional.isPresent()) {
-            return modelMapper.map(bookOptional.get(), BookDTO.class);
+        if (bookRepo.findByTitle(title).isPresent()) {
+            return modelMapper.map(bookOptional.get(), BookResponse.class);
         } else {
             return null;
         }
     }
 
-    public String updateBook(BookDTO book) {
+    public boolean updateBook(BookRequest bookRequest) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(book.getId()));
+        query.addCriteria(Criteria.where("id").is(bookRequest.getId()));
         Update update = new Update();
-        update.set("price", book.getPrice());
+        update.set("price", bookRequest.getPrice());
         long updateCount = mongoTemplate.updateFirst(query, update, Book.class).getModifiedCount();
-        return updateCount > 0 ? "update succeed" : "update failed.";
+        return updateCount > 0 ? true : false;
     }
 
-    public String deleteBook(String id) {
+    public boolean deleteBook(String id) {
         bookRepo.deleteById(id);
-        return "Book Deleted";
+        return true;
     }
 
 

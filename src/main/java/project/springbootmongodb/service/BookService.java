@@ -1,22 +1,23 @@
 package project.springbootmongodb.service;
 
-import project.springbootmongodb.dto.BookDTO;
+import project.springbootmongodb.dto.BookRequest;
+import project.springbootmongodb.dto.BookResponse;
 
 import java.util.List;
 
 public interface BookService {
 
-    BookDTO addBook(BookDTO book);  //create
+    BookResponse addBook(BookRequest bookRequest);  //create
 
-    List<BookDTO> allBooks();   //read
+    List<BookResponse> allBooks();   //read
 
-    BookDTO searchBook(String id);  //read
+    BookResponse searchBook(String id);  //read
 
-    BookDTO searchBookByTitle(String title);    //read
+    BookResponse searchBookByTitle(String title);    //read
 
-    String updateBook(BookDTO book);    //update
+    boolean updateBook(BookRequest bookRequest);    //update
 
-    String deleteBook(String id); //delete
+    boolean deleteBook(String id); //delete
 
 
 }
